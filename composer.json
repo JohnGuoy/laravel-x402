@@ -1,0 +1,62 @@
+{
+    "name": "johnguoy/laravel-x402",
+    "description": "Laravel SDK for the x402 V2 HTTP payment protocol. Charge AI agents and API clients per request using USDC stablecoins over HTTP.",
+    "keywords": ["laravel", "x402", "payment", "usdc", "stablecoin", "ai-agent", "http-402", "web3", "micropayment", "coinbase", "base-chain"],
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "name": "John Guoy",
+            "email": "johnguoy@gmail.com",
+            "homepage": "https://github.com/johnguoy",
+            "role": "Developer"
+        }
+    ],
+    "homepage": "https://github.com/johnguoy/laravel-x402",
+    "support": {
+        "issues": "https://github.com/johnguoy/laravel-x402/issues",
+        "source": "https://github.com/johnguoy/laravel-x402"
+    },
+    "require": {
+        "php": "^8.2",
+        "illuminate/support": "^11.0|^12.0",
+        "illuminate/http": "^11.0|^12.0",
+        "illuminate/routing": "^11.0|^12.0",
+        "guzzlehttp/guzzle": "^7.8"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^9.0|^10.0",
+        "phpunit/phpunit": "^11.0|^12.0",
+        "mockery/mockery": "^1.6",
+        "laravel/pint": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "JohnGuoy\\LaravelX402\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "JohnGuoy\\LaravelX402\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "JohnGuoy\\LaravelX402\\X402ServiceProvider"
+            ],
+            "aliases": {
+                "X402": "JohnGuoy\\LaravelX402\\Facades\\X402"
+            }
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "lint": "vendor/bin/pint"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
