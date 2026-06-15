@@ -2,6 +2,7 @@
 
 namespace JohnGuoy\LaravelX402\Tests\Feature;
 
+use PHPUnit\Framework\Attributes\Test;
 use Illuminate\Support\Facades\Route;
 use Mockery;
 use Mockery\MockInterface;
@@ -69,7 +70,7 @@ class X402PaymentMiddlewareTest extends TestCase
 
     // ── 402 — no payment header ───────────────────────────────────────────
 
-    /** @test */
+    #[Test]
     public function it_returns_402_when_no_payment_header_is_present(): void
     {
         $route = $this->protectedRoute();
@@ -81,7 +82,7 @@ class X402PaymentMiddlewareTest extends TestCase
         $this->assertNotEmpty($response->headers->get('PAYMENT-REQUIRED'));
     }
 
-    /** @test */
+    #[Test]
     public function payment_required_header_is_valid_base64_json(): void
     {
         $route = $this->protectedRoute();
@@ -104,7 +105,7 @@ class X402PaymentMiddlewareTest extends TestCase
         $this->assertSame('2', $req['extra']['version']);
     }
 
-    /** @test */
+    #[Test]
     public function payment_required_header_contains_correct_atomic_amount(): void
     {
         $route = $this->protectedRoute('0.01');
@@ -118,7 +119,7 @@ class X402PaymentMiddlewareTest extends TestCase
         $this->assertSame('10000', $decoded[0]['maxAmountRequired']);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_correct_wallet_address_in_payment_requirement(): void
     {
         $route = $this->protectedRoute();
@@ -136,7 +137,7 @@ class X402PaymentMiddlewareTest extends TestCase
 
     // ── 402 — malformed signature header ─────────────────────────────────
 
-    /** @test */
+    #[Test]
     public function it_returns_402_for_malformed_payment_signature(): void
     {
         $route = $this->protectedRoute();
@@ -149,7 +150,7 @@ class X402PaymentMiddlewareTest extends TestCase
 
     // ── 402 — verification failure ────────────────────────────────────────
 
-    /** @test */
+    #[Test]
     public function it_returns_402_when_facilitator_rejects_payment(): void
     {
         $route = $this->protectedRoute();
@@ -163,7 +164,7 @@ class X402PaymentMiddlewareTest extends TestCase
 
     // ── 402 — settlement failure ──────────────────────────────────────────
 
-    /** @test */
+    #[Test]
     public function it_returns_402_when_settlement_fails(): void
     {
         $route = $this->protectedRoute();
@@ -180,7 +181,7 @@ class X402PaymentMiddlewareTest extends TestCase
 
     // ── 200 — successful payment ──────────────────────────────────────────
 
-    /** @test */
+    #[Test]
     public function it_passes_request_through_after_successful_payment(): void
     {
         $route = $this->protectedRoute();
@@ -192,7 +193,7 @@ class X402PaymentMiddlewareTest extends TestCase
         $response->assertJson(['data' => 'secret']);
     }
 
-    /** @test */
+    #[Test]
     public function it_attaches_payment_response_header_on_success(): void
     {
         $route = $this->protectedRoute();
@@ -203,7 +204,7 @@ class X402PaymentMiddlewareTest extends TestCase
         $this->assertNotEmpty($response->headers->get('PAYMENT-RESPONSE'));
     }
 
-    /** @test */
+    #[Test]
     public function payment_response_header_contains_tx_hash(): void
     {
         $route = $this->protectedRoute();
@@ -220,7 +221,7 @@ class X402PaymentMiddlewareTest extends TestCase
 
     // ── Price precision tests ─────────────────────────────────────────────
 
-    /** @test */
+    #[Test]
     public function middleware_correctly_converts_one_dollar_price(): void
     {
         Route::get('/api/dollar', fn () => response()->json(['ok' => true]))
@@ -234,7 +235,7 @@ class X402PaymentMiddlewareTest extends TestCase
         $this->assertSame('1000000', $decoded[0]['maxAmountRequired']);
     }
 
-    /** @test */
+    #[Test]
     public function middleware_correctly_converts_one_tenth_cent_price(): void
     {
         Route::get('/api/micro', fn () => response()->json(['ok' => true]))
@@ -251,7 +252,7 @@ class X402PaymentMiddlewareTest extends TestCase
 
     // ── Multiple routes ───────────────────────────────────────────────────
 
-    /** @test */
+    #[Test]
     public function different_routes_can_have_different_prices(): void
     {
         Route::get('/api/cheap',     fn () => response()->json([]))->middleware('x402:0.001');
@@ -266,7 +267,7 @@ class X402PaymentMiddlewareTest extends TestCase
 
     // ── ServiceProvider ───────────────────────────────────────────────────
 
-    /** @test */
+    #[Test]
     public function service_provider_registers_payment_amount_singleton(): void
     {
         $a = $this->app->make(\JohnGuoy\LaravelX402\Support\PaymentAmount::class);
@@ -275,7 +276,7 @@ class X402PaymentMiddlewareTest extends TestCase
         $this->assertSame($a, $b);
     }
 
-    /** @test */
+    #[Test]
     public function service_provider_registers_x402_manager_singleton(): void
     {
         $a = $this->app->make(X402Manager::class);
@@ -284,7 +285,7 @@ class X402PaymentMiddlewareTest extends TestCase
         $this->assertSame($a, $b);
     }
 
-    /** @test */
+    #[Test]
     public function facade_resolves_to_x402_manager(): void
     {
         $via_facade    = \JohnGuoy\LaravelX402\Facades\X402::getFacadeRoot();

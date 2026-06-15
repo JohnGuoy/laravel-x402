@@ -2,6 +2,7 @@
 
 namespace JohnGuoy\LaravelX402\Tests\Unit;
 
+use PHPUnit\Framework\Attributes\Test;
 use Illuminate\Http\Request;
 use JohnGuoy\LaravelX402\Exceptions\MissingAssetAddressException;
 use JohnGuoy\LaravelX402\Exceptions\MissingWalletAddressException;
@@ -26,7 +27,7 @@ class PaymentRequirementTest extends TestCase
 
     // ── build() ───────────────────────────────────────────────────────────
 
-    /** @test */
+    #[Test]
     public function it_builds_a_valid_requirement_array(): void
     {
         $reqs = $this->builder->build(
@@ -56,7 +57,7 @@ class PaymentRequirementTest extends TestCase
         $this->assertSame(6,                 $req['extra']['decimals']);
     }
 
-    /** @test */
+    #[Test]
     public function it_converts_dollar_prefixed_price_correctly(): void
     {
         $reqs = $this->builder->build(
@@ -72,7 +73,7 @@ class PaymentRequirementTest extends TestCase
         $this->assertSame('1000', $reqs[0]['maxAmountRequired']);
     }
 
-    /** @test */
+    #[Test]
     public function it_includes_full_url_as_resource(): void
     {
         $reqs = $this->builder->build(
@@ -87,7 +88,7 @@ class PaymentRequirementTest extends TestCase
         $this->assertSame('https://api.example.com/v1/weather', $reqs[0]['resource']);
     }
 
-    /** @test */
+    #[Test]
     public function it_throws_when_wallet_address_is_empty(): void
     {
         $this->expectException(MissingWalletAddressException::class);
@@ -102,7 +103,7 @@ class PaymentRequirementTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_throws_when_asset_address_is_empty(): void
     {
         $this->expectException(MissingAssetAddressException::class);
@@ -119,7 +120,7 @@ class PaymentRequirementTest extends TestCase
 
     // ── encode / decode ───────────────────────────────────────────────────
 
-    /** @test */
+    #[Test]
     public function it_base64_encodes_and_decodes_requirements(): void
     {
         $reqs = $this->builder->build(
@@ -141,7 +142,7 @@ class PaymentRequirementTest extends TestCase
         $this->assertEquals($reqs, $decoded);
     }
 
-    /** @test */
+    #[Test]
     public function it_decodes_roundtrip_preserving_all_fields(): void
     {
         $reqs    = $this->builder->build(
